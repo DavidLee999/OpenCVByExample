@@ -9,8 +9,8 @@ using namespace cv;
 
 int main(int argc, const char** argv)
 {
-    Mat color = imread(R"(..\lena.jpg)");
-    Mat gray = imread(R"(..\lena.jpg)", 0);
+    Mat color = imread(R"(.\lena.jpg)");
+    Mat gray = imread(R"(.\lena.jpg)", 0);
 
     imwrite("lenaGray.jpg", gray);
 

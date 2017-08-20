@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+// #include <vector>
 #include <sstream>
 #include <cmath>
 using namespace std;
@@ -7,7 +8,7 @@ using namespace std;
 #include "opencv2/core.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
-#include "utils/MultipleImageWindow.h"
+// #include "utils/MultipleImageWindow.h"
 using namespace cv;
 
 const char* keys =
@@ -113,6 +114,29 @@ void connectedComponentsStats(const Mat& img)
 	imshow("Result", output);
 }
 
+void FindContoursBasic(const Mat& img)
+{
+	vector<vector<Point>> contours;
+	Mat img_copy;
+	img.copyTo(img_copy);
+
+	findContours(img_copy, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+	Mat output = Mat::zeros(img.rows, img.cols, CV_8UC3);
+	if (contours.size() == 0)
+	{
+		cout << "No objects detected" << endl;
+		return;
+	}
+	else
+		cout << "number of objects detected: " << contours.size() << endl;
+
+	RNG rng{ 0xFFFFFFFF };
+	for (int i = 0; i < contours.size(); i++)
+		drawContours(output, contours, i, randomColor(rng));
+	
+	imshow("Result", output);
+}
 int main(int argc, const char** argv)
 {
 	CommandLineParser parser(argc, argv, keys);
@@ -185,6 +209,9 @@ int main(int argc, const char** argv)
 		break;
 	case 2:
 		connectedComponentsStats(img_thr);
+		break;
+	case 3:
+		FindContoursBasic(img_thr);
 		break;
 	default:
 		break;
